@@ -1,4 +1,4 @@
-graph_a = [[0, 1, 0, 0, 0], [0, 0, 0 ,0, 0], [0, 0, 0 ,0, 0], [0, 0, 0 ,0, 0]]
+graph_a = [[0, 1, 2, 0, 0], [0, 0, 0 ,0, 0], [0, 0, 0 ,0, 0], [0, 0, 0 ,0, 0]]
 
 class Bfssearch:
     def __init__(self, graph):
@@ -7,10 +7,12 @@ class Bfssearch:
         self.postoadd = [] 
         self.numstep = 0
         self.checked = set()
-        self.found = False
     def maincheck(self):
-        while self.found == False:
-            for x in self.pos:                
+        while True:
+            for x in self.pos:       
+                if self.graph[x[0]][x[1]] == 2:
+                    print(x)
+                    return x         
                 if x in self.checked:
                     print("Already checked")
                     break      
@@ -21,7 +23,7 @@ class Bfssearch:
                     #Check if left is blocked
                     print("Left is blocked for " + str(x))
                 elif (x[0]-1, x[1]) not in self.checked:
-                    self.postoadd.append((x[0]-1, x[1], x[2]+1))
+                    self.postoadd.append((x[0]-1, x[1]))
                     print("Appended new at left " + str(x))            
                 
                 if x[0] == len(self.graph)-1:
@@ -30,37 +32,20 @@ class Bfssearch:
                     #Check if right is blocked
                     print("Right is blocked for " + str(x))
                 elif (x[0]+1, x[1]) not in self.checked:
-                    self.postoadd.append((x[0]+1, x[1], x[2]+1))
+                    self.postoadd.append((x[0]+1, x[1]))
                     print("Appended new at right " + str(x))
                 
-                self.checked.add(x)
+                if x[1] == 0:
+                    print("Up is bounded for " + str(x))
+                elif self.graph[x[0]][x[1]-1] == 1:
+                    print("Up is blocked for " + str(x))
+                elif (x[0], x[1]-1) not in self.checked:
+                    self.postoadd.append((x[0]+1, x[1]))
+
+                
+                self.checked.add((x[0], x[1]))
             self.pos = self.postoadd
             self.postoadd = []
- #           if x[1] == 0:
-  #              print("Up is bounded for " + str(x)
-   #         elif self.graph[x[0]][x[1]-1] == 1:
-    #            print("Up is blocked for " + str(x))
-     #       else:
-      #          self.pos.append((x[0], x[1]-1, x[2]+1))
-       #         print("Appended new at up")
-
-        #    if x[1] == len(self.graph[0]):
-
-            self.checked.add(x)
-            del x
-
-            
-            # if self.graph[x[0]][x[1]-1] == 1 or x[1] == 0:
-            #     #Check if up is blocked
-            #     print("Up is blocked for " + str(x))
-            #     self.checked.add(x)
-            
-            
-            # if self.graph[x[0]][x[1]-1] == 1 or \
-            # x[1] == len(self.graph[0]):
-            #     #Check if down is blocked
-            #     print("Down is blocked for " + str(x))
-            #     self.checked.add(x)
         print(self.pos)
         print(self.checked)
                 
