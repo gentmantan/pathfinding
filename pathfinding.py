@@ -7,33 +7,35 @@ class Bfssearch:
         self.postoadd = [] 
         self.numstep = 0
         self.checked = set()
-
+        self.found = False
     def maincheck(self):
-        while self.pos:
-            for x in self.pos[0]:                
+        while self.found == False:
+            for x in self.pos:                
                 if x in self.checked:
                     print("Already checked")
-                    del x
-                           
+                    break      
 
                 if x[0] == 0:
                     print("Left is bounded for " + str(x))
                 elif self.graph[x[0]-1][x[1]] == 1:
                     #Check if left is blocked
                     print("Left is blocked for " + str(x))
-                else:
+                elif (x[0]-1, x[1]) not in self.checked:
                     self.postoadd.append((x[0]-1, x[1], x[2]+1))
-                    print("Appended new at left")            
+                    print("Appended new at left " + str(x))            
                 
                 if x[0] == len(self.graph)-1:
                     print("Right is bounded for " + str(x))
                 elif self.graph[x[0]+1][x[1]] == 1:
                     #Check if right is blocked
                     print("Right is blocked for " + str(x))
-                else:
-                    self.pos.append((x[0]+1, x[1], x[2]+1))
-                    print("Appended new at right")
-
+                elif (x[0]+1, x[1]) not in self.checked:
+                    self.postoadd.append((x[0]+1, x[1], x[2]+1))
+                    print("Appended new at right " + str(x))
+                
+                self.checked.add(x)
+            self.pos = self.postoadd
+            self.postoadd = []
  #           if x[1] == 0:
   #              print("Up is bounded for " + str(x)
    #         elif self.graph[x[0]][x[1]-1] == 1:
